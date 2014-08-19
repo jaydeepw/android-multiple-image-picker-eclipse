@@ -40,8 +40,7 @@ public class GalleryFragment extends Fragment {
         mActivity = ((ImagePickerActivity) getActivity());
 
 
-        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID,
-                MediaStore.Images.ImageColumns.ORIENTATION};
+        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID, MediaStore.Images.ImageColumns.ORIENTATION};
         final String orderBy = MediaStore.Images.Media._ID;
         Cursor imageCursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
         while (imageCursor.moveToNext()) {

@@ -71,8 +71,6 @@ public class ImagePickerActivity extends FragmentActivity implements ActionBar.T
         mDoneButtonView.setOnClickListener(this);
 
         setupActionBar();
-
-
     }
 
     /**
@@ -109,7 +107,7 @@ public class ImagePickerActivity extends FragmentActivity implements ActionBar.T
                     getResources().getDisplayMetrics());
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(px, px));
 
-            if(mSelectedImages.size() == 1){
+            if(mSelectedImages.size() == 1) {
                 mSelectedImagesContainer.setVisibility(View.VISIBLE);
                 mSelectedImageEmptyMessage.setVisibility(View.GONE);
             }
@@ -161,21 +159,6 @@ public class ImagePickerActivity extends FragmentActivity implements ActionBar.T
         return super.onOptionsItemSelected(item);
     }
 
-/*    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }*/
-
     @Override
     public void onClick(View view) {
         //cannot use switch statement since ADT 14 -.-
@@ -189,7 +172,7 @@ public class ImagePickerActivity extends FragmentActivity implements ActionBar.T
             Intent intent = new Intent();
             intent.putExtra(TAG_IMAGE_URI, uris);
             setResult(Activity.RESULT_OK, intent);
-        } else if(view.getId() == R.id.action_btn_cancel){
+        } else if(view.getId() == R.id.action_btn_cancel) {
             setResult(Activity.RESULT_CANCELED);
         }
         finish();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,19 +16,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Context mContext;
     private SurfaceHolder mHolder;
     private Camera mCamera;
-    private List<Camera.Size> mSupportedPreviewSizes;
+    // private List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
         mContext = context;
         mCamera = camera;
-
-        // supported preview sizes
-        mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
-        for(Camera.Size str: mSupportedPreviewSizes) {
-            Log.d(TAG, str.width + "/" + str.height);	
-        }
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -65,6 +60,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.stopPreview();
         } catch (Exception e){
             // ignore: tried to stop a non-existent preview
+        	e.printStackTrace();
         }
 
         // set preview size and make any resize, rotate or reformatting changes here
@@ -85,9 +81,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        
 
-        if (mSupportedPreviewSizes != null) {
-            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
+        // supported preview sizes
+        List<Size> supportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+        for(Camera.Size str: supportedPreviewSizes) {
+            Log.d(TAG, str.width + "/" + str.height);
+        }
+        
+        if (supportedPreviewSizes != null) {
+        	// TODO: fix this.
+        	// thisis a hack involved here for now.
+        	// Was not able to figure out why resolveSize above is return height = 0
+        	// on my Nexus 4
+            mPreviewSize = getOptimalPreviewSize(supportedPreviewSizes, width, getResources().getDisplayMetrics().heightPixels);
         }
 
         float ratio;
@@ -104,6 +111,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+    	Log.d(TAG, "values: " + w + "/" + h);
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) h / w;
 
@@ -117,8 +125,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         for (Camera.Size size : sizes) {
             double ratio = (double) size.height / size.width;
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE)
-                continue;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) {
+            	continue;	
+            }
 
             if (Math.abs(size.height - targetHeight) < minDiff) {
                 optimalSize = size;

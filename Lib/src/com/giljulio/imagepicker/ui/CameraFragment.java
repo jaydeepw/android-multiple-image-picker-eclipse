@@ -139,7 +139,7 @@ public class CameraFragment extends Fragment implements /*SurfaceHolder.Callback
         mTakePictureBtn.setEnabled(true);
         Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-        //rotates the image to portrate
+        //rotates the image to portrait
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
