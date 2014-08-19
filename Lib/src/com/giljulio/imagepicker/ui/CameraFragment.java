@@ -148,6 +148,8 @@ public class CameraFragment extends Fragment implements /*SurfaceHolder.Callback
         Uri contentUri = Uri.parse(path);
         Image image = getImageFromContentUri(contentUri);
         ((ImagePickerActivity)getActivity()).addImage(image);
+        
+        mCamera.startPreview();
     }
 
 
